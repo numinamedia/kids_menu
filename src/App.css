@@ -1075,6 +1075,16 @@ body {
   margin-bottom: 8px;
 }
 
+.order-timestamp {
+  color: #636e72;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
 .order-footer {
   display: flex;
   justify-content: space-between;

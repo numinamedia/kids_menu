@@ -1,5 +1,16 @@
 import { useOrders, useUpdateOrder } from '../../hooks/useOrders';
 
+// Format date/time in Edmonton timezone (America/Edmonton)
+function formatEdmontonTime(timestamp) {
+  if (!timestamp) return 'N/A';
+  const date = new Date(timestamp);
+  return date.toLocaleString('en-CA', {
+    timeZone: 'America/Edmonton',
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
+}
+
 const STATUS_LABELS = {
   pending: '⏳ Pending',
   preparing: '🍳 Preparing',
@@ -22,6 +33,14 @@ export default function OrderQueue() {
     const flow = ['pending', 'preparing', 'ready', 'completed'];
     const idx = flow.indexOf(currentStatus);
     return flow[Math.min(idx + 1, flow.length - 1)];
+  };
+
+  const handleAdvanceOrder = async (order) => {
+    const nextStatus = advanceStatus(order.status);
+    const success = await updateOrderStatus(order.id, nextStatus);
+    if (success) {
+      refresh(); // Force refresh after status update
+    }
   };
 
   if (!import.meta.env.VITE_SUPABASE_URL) {
@@ -103,17 +122,20 @@ export default function OrderQueue() {
               <div className="order-notes">📝 {order.notes}</div>
             )}
 
+            <div className="order-timestamp">
+              🕐 {formatEdmontonTime(order.timestamp)}
+            </div>
+
             <div className="order-footer">
-              <span className="order-time">
-                {order.timestamp ? new Date(order.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A'}
-              </span>
               {order.status !== 'completed' && (
                 <button
                   className="advance-btn"
-                  onClick={() => updateOrderStatus(order.id, advanceStatus(order.status))}
+                  onClick={() => handleAdvanceOrder(order)}
                   disabled={updating}
                 >
-                  Next →
+                  {order.status === 'pending' ? 'Start Preparing →' : 
+                   order.status === 'preparing' ? 'Mark Ready →' : 
+                   'Complete →'}
                 </button>
               )}
             </div>
