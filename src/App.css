@@ -246,10 +246,13 @@ body {
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 30px 20px;
-  background: none; /* Removed the solid gradient */
+  padding: 20px 20px;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  background: none;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   pointer-events: none;
 }
 
@@ -588,12 +591,44 @@ body {
 
 /* Mobile specific tweak for the footer */
 @media (max-width: 768px) {
-  .tray-badge-text {
-    font-size: 0.8rem;
-    padding-right: 2px;
+  .order-footer {
+    padding: 16px 16px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    gap: 10px;
   }
+
+  .tray-summary {
+    margin-bottom: 0;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .tray-badge-text {
+    font-size: 0.75rem;
+  }
+
   .tray-badge {
-    padding: 4px 10px;
+    padding: 4px 8px;
+  }
+
+  .duo-order-btn {
+    font-size: 1.1rem;
+    padding: 14px 32px;
+    width: 100%;
+    max-width: 400px;
+    justify-content: center;
+    min-height: 52px; /* iOS minimum touch target */
+  }
+
+  .notes-row {
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .note-btn {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+    min-height: 36px;
   }
 }
 
@@ -1260,6 +1295,11 @@ body {
 
 /* Responsive Dashboard */
 @media (max-width: 768px) {
+  .dashboard-container {
+    padding: 12px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+
   .dashboard-header {
     flex-direction: column;
     gap: 12px;
@@ -1280,5 +1320,61 @@ body {
 
   .order-item {
     font-size: 0.75rem;
+  }
+
+  /* Fix order card mobile layout */
+  .order-card {
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+
+  .order-footer {
+    position: static;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+    padding-bottom: 0;
+    margin-top: 12px;
+  }
+
+  .advance-btn {
+    width: 100%;
+    padding: 12px 16px;
+    min-height: 48px; /* iOS touch target */
+    font-size: 1rem;
+  }
+
+  .status-filters {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filter-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .dashboard-section {
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+}
+
+/* iPhone SE and smaller */
+@media (max-width: 400px) {
+  .dashboard-container {
+    padding: 8px;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .dashboard-section {
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .order-card {
+    padding: 12px;
   }
 }
