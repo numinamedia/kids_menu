@@ -1,0 +1,16 @@
+{
+  "name": "Kids Menu",
+  "short_name": "Menu",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#1e272e",
+  "theme_color": "#4158D0",
+  "icons": [
+    {
+      "src": "/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

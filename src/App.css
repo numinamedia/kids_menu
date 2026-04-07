@@ -1,0 +1,1284 @@
+/* Import Nunito: A beautiful, rounded, kid-friendly typeface */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap');
+
+/* --- GLOBAL VARIABLES --- */
+:root {
+  --bg-dark: #1e272e; /* Warmer, softer navy/dark mode */
+  --text-light: #e5e5e5;
+  --duo-shadow: rgba(0, 0, 0, 0.3);
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  margin: 0;
+  font-family: 'Nunito', sans-serif; /* Upgraded Global Font */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- GLASSMORPHISM GATEWAY LAYOUT --- */
+.gateway-bg {
+  background-color: #4158D0;
+  background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                    radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                    radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%), 
+                    radial-gradient(at 0% 100%, hsla(21,79%,49%,1) 0, transparent 50%), 
+                    radial-gradient(at 50% 100%, hsla(268,36%,45%,1) 0, transparent 50%), 
+                    radial-gradient(at 100% 100%, hsla(285,69%,42%,1) 0, transparent 50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Updated to allow scrolling */
+  padding: 40px 20px; /* Added padding */
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.glass-panel {
+  /* The Frosted Glass Magic */
+  background: rgba(255, 255, 255, 0.15); /* Semi-transparent white */
+  backdrop-filter: blur(24px); /* The actual frosted blur */
+  -webkit-backdrop-filter: blur(24px); /* Safari support */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Catching the "light" on the edge */
+  border-radius: 48px;
+  padding: 60px 80px 20px 80px;
+  box-shadow: 0 24px 40px rgba(0, 0, 0, 0.2); /* Deep shadow to float the glass */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.who-is-watching {
+  font-size: 3.5rem; 
+  font-weight: 900;
+  margin-bottom: 3rem;
+  letter-spacing: -1.5px;
+  color: #ffffff;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Helps text pop off the glass */
+}
+
+.profiles-grid {
+  display: flex;
+  gap: 50px;
+  margin-bottom: 2rem;
+}
+
+.profile-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.7); /* Slightly faded white */
+  margin: 0;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.profile-wrapper:hover .profile-name {
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+/* --- DUOLINGO TACTILE BUTTONS --- */
+.duo-avatar-btn {
+  width: 160px;
+  height: 160px;
+  border-radius: 36px; /* Rounder, friendlier corners */
+  border: 4px solid transparent;
+  box-shadow: 0 8px 0 var(--duo-shadow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s, box-shadow 0.1s, border 0.2s;
+  position: relative;
+  overflow: hidden; /* Ensures your PNGs don't spill out of the rounded corners */
+}
+
+.duo-avatar-btn:hover {
+  border: 4px solid white;
+}
+
+.duo-avatar-btn:active {
+  transform: translateY(8px);
+  box-shadow: 0 0px 0 var(--duo-shadow);
+  border: 4px solid rgba(255, 255, 255, 0.5);
+}
+
+.avatar-emoji {
+  font-size: 96px; /* Scaled up by 20% */
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.custom-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- THE MAIN MENU SCREEN --- */
+.menu-screen {
+  background-color: #f4f6f8; /* Softer, off-white background */
+  color: #2d3436;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.menu-nav {
+  padding-bottom: 10px;
+}
+
+/* Softened "Switch User" Button */
+.duo-back-btn {
+  background: #dfe4ea;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 50px; /* Pill shape */
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #57606f;
+  box-shadow: 0 4px 0 #ced6e0;
+  cursor: pointer;
+  transition: all 0.1s;
+  margin: 0 0 24px 0;
+  font-family: 'Nunito', sans-serif;
+}
+
+.duo-back-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 0px 0 #ced6e0;
+}
+
+.menu-header h1 {
+  color: #ffffff; 
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin: 0 0 24px 0; /* <-- Increased from 10px to 24px */
+  letter-spacing: -1px;
+}
+
+.menu-header p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* --- NINTENDO SWITCH MEAL GRID --- */
+.meal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  padding: 30px 0 120px 0; /* Padding at bottom so the fixed button doesn't block food */
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Refined Meal Cards (Polaroid padding) */
+.meal-card {
+  background: white;
+  border-radius: 28px;
+  padding: 16px; /* Internal frame padding */
+  border: 6px solid transparent; /* Chunkier invisible border */
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.1s, box-shadow 0.1s, border 0.1s, background-color 0.2s;
+}
+
+.meal-card:active {
+  transform: translateY(8px);
+  box-shadow: 0 0px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Chunky "Selected" State — uses kid's accent color via CSS variable */
+.meal-card.selected {
+  border: 6px solid var(--kid-color, #1cb0f6);
+  background-color: #f0f9ff;
+  transform: scale(1.03);
+  box-shadow: 0 12px 20px var(--kid-color-shadow, rgba(28, 176, 246, 0.2)), 0 8px 0 var(--kid-color-shadow, rgba(28, 176, 246, 0.4));
+}
+
+.meal-card.selected:active {
+  transform: translateY(8px) scale(1.03);
+  box-shadow: 0 0px 0 var(--kid-color-shadow, rgba(28, 176, 246, 0.4));
+}
+
+.meal-image-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.meal-icon {
+  font-size: 80px;
+}
+
+.meal-name {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #2d3436;
+  margin: 0;
+  text-align: center;
+}
+
+/* --- THE BIG ORDER BUTTON --- */
+.order-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 30px 20px;
+  background: none; /* Removed the solid gradient */
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.duo-order-btn {
+  pointer-events: auto;
+  background-color: #58cc02;
+  color: white;
+  font-size: 1.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 20px 60px;
+  border: none;
+  border-radius: 24px; /* Rounder */
+  cursor: pointer;
+  box-shadow: 0 8px 0 #58a700; 
+  transition: transform 0.1s, box-shadow 0.1s;
+  font-family: 'Nunito', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Perfect spacing between rocket and text */
+}
+
+.duo-order-btn:active {
+  transform: translateY(8px);
+  box-shadow: 0 0px 0 #58a700;
+}
+
+.menu-glass {
+  width: 100%;
+  max-width: 850px;
+  padding: 40px;
+}
+
+.glass-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.glass-btn:active {
+  box-shadow: 0 0px 0 rgba(0, 0, 0, 0.2);
+}
+
+.category-section {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.category-title {
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: left;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Adjust the meal-grid padding since we have multiple grids now */
+.category-section .meal-grid {
+  padding: 0 0 20px 0; /* Removed the massive bottom padding */
+}
+
+/* Add breathing room to the bottom of the container so the fixed button doesn't block the drinks */
+.menu-categories-container {
+  padding-bottom: 120px; 
+}
+
+/* ========================================= */
+/* --- RESPONSIVE DESIGN (PHONES & IPADS) --- */
+/* ========================================= */
+
+/* TABLETS & SMALLER SCREENS (Max 1024px) */
+@media (max-width: 1024px) {
+  .glass-panel {
+    padding: 40px 50px 20px 50px; /* Slimmer side padding */
+  }
+  .meal-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Slightly smaller cards */
+    gap: 16px;
+  }
+  .meal-icon {
+    font-size: 60px; /* Scale down the 3D emojis */
+  }
+}
+
+/* MOBILE PHONES (Max 768px) */
+@media (max-width: 768px) {
+  .gateway-bg {
+    padding: 20px 15px; /* Tighter to the screen edge */
+  }
+
+  .glass-panel {
+    padding: 30px 20px 20px 20px;
+    border-radius: 36px; /* Slightly less round on small screens */
+    width: 100%;
+  }
+
+  /* --- Gateway Screen Mobile Fixes --- */
+  .who-is-watching {
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .profiles-grid {
+    gap: 20px; /* Bring Finley and Avery closer together */
+  }
+
+  .duo-avatar-btn {
+    width: 110px; /* Shrink tactile buttons */
+    height: 110px;
+    border-radius: 28px;
+  }
+
+  .avatar-emoji {
+    font-size: 64px;
+  }
+
+  .profile-name {
+    font-size: 1.2rem;
+  }
+
+  /* --- Menu Screen Mobile Fixes --- */
+  .menu-header h1 {
+    font-size: 1.8rem; /* Fixes the squished header text */
+    margin-bottom: 8px; 
+  }
+
+  .menu-header p {
+    font-size: 1rem;
+  }
+
+  .category-title {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+  }
+
+  /* Force a perfect 2-column grid on mobile so it feels like a real iOS app */
+  .meal-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding-bottom: 15px;
+  }
+
+  .meal-card {
+    padding: 12px;
+    border-radius: 20px;
+    border-width: 4px; /* Thinner selected border for small screens */
+  }
+
+  .meal-card.selected {
+    border-width: 4px;
+  }
+
+  .meal-icon {
+    font-size: 45px;
+  }
+
+  .meal-name {
+    font-size: 0.9rem; /* Prevent long text from wrapping awkwardly */
+  }
+
+  /* --- Order Button Mobile Fixes --- */
+  .order-footer {
+    padding: 15px;
+  }
+
+  .duo-order-btn {
+    font-size: 1.2rem;
+    padding: 16px 40px;
+    width: 100%; /* Full-width button on mobile is the iOS standard */
+    justify-content: center;
+  }
+}
+
+/* VERY SMALL PHONES (Max 400px - like iPhone SE) */
+@media (max-width: 400px) {
+  .duo-avatar-btn {
+    width: 90px;
+    height: 90px;
+  }
+  .avatar-emoji {
+    font-size: 50px;
+  }
+  .meal-grid {
+    gap: 8px; /* Extra tight layout for tiny screens */
+  }
+}
+
+/* --- SUCCESS CELEBRATION --- */
+.success-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2); /* Dim the background slightly */
+  animation: fadeIn 0.4s ease-out;
+}
+
+.success-card {
+  text-align: center;
+  padding: 60px !important;
+  transform: scale(1);
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.success-icon {
+  font-size: 100px;
+  margin-bottom: 20px;
+  animation: rocketLaunch 1s ease-in-out infinite alternate;
+}
+
+.success-card h1 {
+  color: white;
+  font-size: 3rem;
+  margin: 0;
+}
+
+.success-card p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.4rem;
+  margin-top: 10px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes rocketLaunch {
+  from { transform: translateY(0); }
+  to { transform: translateY(-20px); }
+}
+
+/* Blurs the background menu when success shows up */
+.blur-out {
+  filter: blur(10px);
+  transition: filter 0.5s;
+}
+
+/* --- TAB NAVIGATION --- */
+.tab-bar {
+  display: flex;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px;
+  border-radius: 50px;
+  margin-bottom: 20px;
+  gap: 10px;
+  width: 100%;
+}
+
+.tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 800;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+  border-radius: 40px;
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  background: white;
+  color: #1e272e;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.tab-btn.done:not(.active) {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.tab-check {
+  color: #58cc02;
+  font-weight: 900;
+}
+
+/* --- ENHANCED TRAY SUMMARY --- */
+.tray-summary {
+  display: flex;
+  flex-wrap: wrap; /* Allows badges to wrap on small phone screens */
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 12px;
+  border-radius: 24px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 90vw;
+}
+
+.tray-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  padding: 6px 14px;
+  border-radius: 50px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  animation: badgePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tray-badge-icon {
+  font-size: 1.2rem;
+}
+
+.tray-badge-text {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #2d3436;
+  white-space: nowrap; /* Keeps text on one line */
+}
+
+/* Animation for adding new items */
+@keyframes badgePop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Mobile specific tweak for the footer */
+@media (max-width: 768px) {
+  .tray-badge-text {
+    font-size: 0.8rem;
+    padding-right: 2px;
+  }
+  .tray-badge {
+    padding: 4px 10px;
+  }
+}
+
+/* --- EMOJI NOTES ROW --- */
+.notes-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  max-width: 90vw;
+}
+
+.note-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.15s;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.note-btn:active {
+  transform: scale(0.95);
+}
+
+.note-btn.active {
+  background: white;
+  color: #2d3436;
+  border-color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* --- RE-ORDER BUTTON ON PROFILE SCREEN --- */
+.reorder-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  padding: 6px 16px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.15s;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.reorder-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.reorder-btn:active {
+  transform: scale(0.95);
+}
+
+/* --- ORDER ERROR MESSAGE --- */
+.order-error {
+  position: fixed;
+  bottom: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 75, 75, 0.9);
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  padding: 10px 20px;
+  border-radius: 16px;
+  z-index: 100;
+  text-align: center;
+  max-width: 90vw;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Wrapper so blur-out doesn't affect the fixed footer */
+.menu-glass-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* ========================================= */
+/* --- ADMIN LINK ON PROFILE SCREEN --- */
+/* ========================================= */
+.admin-link {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.admin-link:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ========================================= */
+/* --- PIN DIALOG --- */
+/* ========================================= */
+.pin-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.pin-dialog {
+  background: white;
+  border-radius: 32px;
+  padding: 40px;
+  text-align: center;
+  max-width: 320px;
+  width: 90%;
+  color: #2d3436;
+}
+
+.pin-dialog h2 {
+  margin: 0 0 8px;
+  font-size: 1.8rem;
+}
+
+.pin-dialog p {
+  color: #636e72;
+  margin: 0 0 20px;
+}
+
+.pin-display {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.pin-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #dfe6e9;
+  transition: all 0.15s;
+}
+
+.pin-dot.filled {
+  background: #1cb0f6;
+  border-color: #1cb0f6;
+}
+
+.pin-dialog.shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.pin-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.pin-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  background: #f0f0f0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+  transition: all 0.1s;
+  margin: 0 auto;
+}
+
+.pin-btn:active {
+  transform: scale(0.9);
+  background: #dfe6e9;
+}
+
+.pin-btn.backspace {
+  background: #ffeaa7;
+}
+
+.pin-cancel-btn {
+  background: none;
+  border: none;
+  color: #636e72;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.pin-cancel-btn:hover {
+  color: #2d3436;
+}
+
+/* ========================================= */
+/* --- PARENT DASHBOARD --- */
+/* ========================================= */
+.dashboard-container {
+  min-height: 100vh;
+  background: #f8f9fa;
+  color: #2d3436;
+  padding: 20px;
+  font-family: 'Nunito', sans-serif;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto 20px;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.back-to-kids-btn {
+  background: #dfe6e9;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.back-to-kids-btn:hover {
+  background: #b2bec3;
+}
+
+.dashboard-tabs {
+  display: flex;
+  gap: 8px;
+  max-width: 1200px;
+  margin: 0 auto 24px;
+}
+
+.dashboard-tabs .tab-btn {
+  background: #dfe6e9;
+  color: #2d3436;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 800;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.dashboard-tabs .tab-btn.active {
+  background: #1cb0f6;
+  color: white;
+}
+
+.dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-section {
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.refresh-btn {
+  background: #f0f0f0;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.refresh-btn:hover {
+  background: #dfe6e9;
+}
+
+.setup-notice {
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.setup-notice p {
+  margin: 0 0 12px;
+}
+
+.setup-notice ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.setup-notice a {
+  color: #0984e3;
+}
+
+/* Status Filters */
+.status-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.filter-btn {
+  background: #f0f0f0;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn.active {
+  background: #1cb0f6;
+  color: white;
+}
+
+/* Orders Grid */
+.orders-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.order-card {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-left: 6px solid;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.order-kid {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kid-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #1cb0f6;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+}
+
+.order-status-badge {
+  padding: 4px 12px;
+  border-radius: 50px;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.order-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8f9fa;
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+}
+
+.item-category {
+  color: #636e72;
+  text-transform: capitalize;
+}
+
+.order-notes {
+  background: #ffeaa7;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-time {
+  color: #636e72;
+  font-size: 0.85rem;
+}
+
+.advance-btn {
+  background: #58cc02;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.advance-btn:active {
+  transform: scale(0.95);
+}
+
+.loading-text, .empty-text {
+  text-align: center;
+  padding: 40px;
+  color: #636e72;
+}
+
+.error-text {
+  text-align: center;
+  padding: 20px;
+  color: #d63031;
+}
+
+/* Menu Editor */
+.add-btn {
+  background: #58cc02;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+}
+
+.menu-form {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.menu-form h3 {
+  margin: 0 0 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.form-row label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex: 1;
+}
+
+.form-row input, .form-row select {
+  padding: 10px;
+  border: 1px solid #dfe6e9;
+  border-radius: 8px;
+  font-family: 'Nunito', sans-serif;
+}
+
+.form-row input[type="color"] {
+  width: 60px;
+  height: 40px;
+  padding: 4px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.save-btn {
+  background: #1cb0f6;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: #dfe6e9;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+}
+
+.menu-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.menu-category-group h3 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  color: #636e72;
+}
+
+.menu-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.menu-item-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  border-left: 4px solid;
+  background: white;
+}
+
+.menu-item-card.unavailable {
+  opacity: 0.5;
+}
+
+.item-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.item-emoji {
+  font-size: 1.3rem;
+}
+
+.item-label {
+  font-weight: 700;
+}
+
+.unavailable-badge {
+  background: #d63031;
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.item-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.toggle-btn, .edit-btn, .delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 1rem;
+  transition: all 0.1s;
+}
+
+.toggle-btn:hover, .edit-btn:hover, .delete-btn:hover {
+  transform: scale(1.2);
+}
+
+.local-menu-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.local-menu-preview h4 {
+  margin: 0 0 8px;
+}
+
+.local-menu-preview ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.local-menu-preview li {
+  padding: 4px 0;
+}
+
+/* Responsive Dashboard */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .dashboard-tabs {
+    justify-content: center;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .menu-items-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .order-item {
+    font-size: 0.75rem;
+  }
+}
