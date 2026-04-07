@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import confetti from 'canvas-confetti'
 import './App.css'
+import './components/v3/v3.css'
 import { orderNotes } from './data/menuData'
 import { useMenu } from './hooks/useMenu'
 import ProfileGateway from './components/ProfileGateway'
@@ -10,6 +11,12 @@ import OrderFooter from './components/OrderFooter'
 import SuccessModal from './components/SuccessModal'
 import Dashboard from './components/ParentDashboard/Dashboard'
 import { supabase } from './lib/supabase'
+
+// V3 Duolingo-Style Components
+import ProfileGatewayV3 from './components/v3/ProfileGatewayV3'
+import MenuScreenV3 from './components/v3/MenuScreenV3'
+import OrderFooterV3 from './components/v3/OrderFooterV3'
+import SuccessModalV3 from './components/v3/SuccessModalV3'
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxiX_dIulvMTLzRZuTN6jYVrms8F8GYVugxdEGU6rcHhW0PU2Y6g4meQjchzrmZqnOodg/exec";
 
@@ -21,6 +28,23 @@ function saveLastOrder(kidId, selectedItems) {
   }
 }
 
+// Get version from URL
+function getAppVersion() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('v');
+}
+
+// Get theme from localStorage or URL
+function getTheme() {
+  const params = new URLSearchParams(window.location.search);
+  const urlTheme = params.get('theme');
+  if (urlTheme) {
+    localStorage.setItem('v3-theme', urlTheme);
+    return urlTheme;
+  }
+  return localStorage.getItem('v3-theme') || 'dark';
+}
+
 function KidApp() {
   const { menuCategories } = useMenu();
   const [activeKid, setActiveKid] = useState(null);
@@ -29,6 +53,25 @@ function KidApp() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [orderError, setOrderError] = useState(false);
+  const version = getAppVersion();
+  const [theme, setTheme] = useState(getTheme());
+
+  // Apply theme class
+  useEffect(() => {
+    if (version === 'v3') {
+      document.documentElement.classList.toggle('v3-light-mode', theme === 'light');
+    } else {
+      document.documentElement.classList.remove('v3-light-mode');
+    }
+  }, [version, theme]);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('v3-theme', newTheme);
+  };
+
+  const isV3 = version === 'v3';
 
   const handleSelectKid = (profile, prefillItems = null) => {
     setActiveKid(profile);
@@ -121,12 +164,63 @@ function KidApp() {
   if (!activeKid) {
     return (
       <>
-        <ProfileGateway onSelectKid={handleSelectKid} />
+        {isV3 ? (
+          <>
+            <button className="v3-theme-toggle" onClick={toggleTheme}>
+              {theme === 'dark' ? '☀️' : '🌙'}
+            </button>
+            <ProfileGatewayV3 onSelectKid={handleSelectKid} />
+          </>
+        ) : (
+          <>
+            <ProfileGateway onSelectKid={handleSelectKid} />
+          </>
+        )}
         <Link to="/admin" className="admin-link">🔒 Parent Dashboard</Link>
+        <Link to={isV3 ? '/' : '/?v=v3'} className="version-toggle">
+          {isV3 ? 'Switch to v1' : 'Try v3 ✨'}
+        </Link>
       </>
     );
   }
 
+  // V3 Layout
+  if (isV3) {
+    return (
+      <>
+        <button className="v3-theme-toggle" onClick={toggleTheme}>
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
+        {showSuccess && <SuccessModalV3 />}
+
+        <MenuScreenV3
+          activeKid={activeKid}
+          selectedItems={selectedItems}
+          onSelectItem={handleSelectItem}
+          onSwitchUser={handleSwitchUser}
+        />
+
+        {!showSuccess && (
+          <>
+            {orderError && (
+              <div className="order-error">
+                ⚠️ Couldn't send — check your connection and try again.
+              </div>
+            )}
+            <OrderFooterV3
+              selectedItems={selectedItems}
+              activeNotes={activeNotes}
+              onToggleNote={handleToggleNote}
+              onSendOrder={handleSendOrder}
+              submitting={submitting}
+            />
+          </>
+        )}
+      </>
+    );
+  }
+
+  // V1 Layout (Original)
   return (
     <div
       className="gateway-bg"
