@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { useMenu } from '../../hooks/useMenu';
 import MealCardV3 from './MealCardV3';
 
@@ -8,10 +8,11 @@ const FLOW_CATEGORIES = ['mains', 'sides', 'drinks'];
 
 export default function MenuScreenV3({ activeKid, selectedItems, onSelectItem, onSwitchUser }) {
   const { menuCategories } = useMenu();
-  const [currentTab, setCurrentTab] = useState(0);
+  const [activeFlowStep, setActiveFlowStep] = useState(0);
+  const categoryRefs = useRef({});
 
   useEffect(() => {
-    setCurrentTab(0);
+    setActiveFlowStep(0);
   }, [activeKid?.id]);
 
   const handleSelectItem = (categoryId, item) => {
@@ -20,19 +21,19 @@ export default function MenuScreenV3({ activeKid, selectedItems, onSelectItem, o
     // Auto-advance only for mains → sides → drinks
     if (FLOW_CATEGORIES.includes(categoryId)) {
       const flowIndex = FLOW_CATEGORIES.indexOf(categoryId);
-      const nextCatId = FLOW_CATEGORIES[flowIndex + 1];
-      if (nextCatId) {
-        // Find the actual tab index for the next category
-        const nextTabIndex = menuCategories.findIndex(c => c.id === nextCatId);
-        if (nextTabIndex >= 0) {
-          setTimeout(() => setCurrentTab(nextTabIndex), 400);
+      const nextFlowStep = flowIndex + 1;
+      if (nextFlowStep < FLOW_CATEGORIES.length) {
+        setActiveFlowStep(nextFlowStep);
+        // Scroll to the next category
+        const nextCatId = FLOW_CATEGORIES[nextFlowStep];
+        if (categoryRefs.current[nextCatId]) {
+          setTimeout(() => {
+            categoryRefs.current[nextCatId]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 300);
         }
       }
     }
   };
-
-  const currentCategory = menuCategories[currentTab];
-  if (!currentCategory) return null;
 
   // Calculate progress based only on flow categories
   const completedFlowSteps = FLOW_CATEGORIES.filter(id => {
@@ -40,12 +41,7 @@ export default function MenuScreenV3({ activeKid, selectedItems, onSelectItem, o
     return cat && selectedItems[cat.id];
   }).length;
   const totalFlowSteps = FLOW_CATEGORIES.length;
-
-  // Find which flow step we're on (0-indexed based on flow categories only)
-  const currentFlowIndex = FLOW_CATEGORIES.indexOf(currentCategory.id);
-  // If current category is not in flow, find the last completed flow step
-  const displayFlowIndex = currentFlowIndex >= 0 ? currentFlowIndex : completedFlowSteps;
-  const progressPercentage = Math.min((displayFlowIndex / (totalFlowSteps - 1)) * 100, 100);
+  const progressPercentage = Math.min((completedFlowSteps / totalFlowSteps) * 100, 100);
 
   return (
     <div className="v3-menu-screen">
@@ -59,14 +55,16 @@ export default function MenuScreenV3({ activeKid, selectedItems, onSelectItem, o
             const cat = menuCategories.find(c => c.id === flowId);
             if (!cat) return null;
             const isDone = !!selectedItems[cat.id];
-            const isActive = currentCategory.id === flowId;
+            const isActive = i === activeFlowStep && !isDone;
             return (
               <div
                 key={flowId}
                 className={`v3-progress-step ${isActive ? 'active' : ''} ${isDone ? 'done' : ''}`}
                 onClick={() => {
-                  const tabIndex = menuCategories.findIndex(c => c.id === flowId);
-                  if (tabIndex >= 0) setCurrentTab(tabIndex);
+                  setActiveFlowStep(i);
+                  if (categoryRefs.current[flowId]) {
+                    categoryRefs.current[flowId].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
                 }}
               >
                 {isDone ? '✓' : i + 1}
@@ -75,7 +73,7 @@ export default function MenuScreenV3({ activeKid, selectedItems, onSelectItem, o
           })}
         </div>
         <p className="v3-progress-text">
-          Step {Math.min(displayFlowIndex + 1, totalFlowSteps)} of {totalFlowSteps}
+          Step {Math.min(completedFlowSteps + 1, totalFlowSteps)} of {totalFlowSteps}
         </p>
       </div>
 
@@ -88,52 +86,48 @@ export default function MenuScreenV3({ activeKid, selectedItems, onSelectItem, o
         <p>Pick your favorites!</p>
       </motion.div>
 
-      {/* Category Tabs - Shows ALL categories */}
-      <div className="v3-category-tabs">
-        {menuCategories.map((cat) => {
-          const isDone = !!selectedItems[cat.id];
-          const isActive = currentTab === menuCategories.indexOf(cat);
-          const isInFlow = FLOW_CATEGORIES.includes(cat.id);
-          return (
-            <button
-              key={cat.id}
-              className={`v3-category-tab ${isActive ? 'active' : ''} ${isDone ? 'done' : ''} ${!isInFlow ? 'optional' : ''}`}
-              onClick={() => setCurrentTab(menuCategories.indexOf(cat))}
-            >
-              <span className="v3-tab-emoji">{cat.items[0]?.icon || '🍽️'}</span>
-              <span>
-                {cat.title.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim()}
-              </span>
-            </button>
-          );
-        })}
-      </div>
+      {/* All Categories - Show ALL at once, scrollable */}
+      {menuCategories.map((cat) => {
+        const isDone = !!selectedItems[cat.id];
+        const isInFlow = FLOW_CATEGORIES.includes(cat.id);
+        const flowIndex = isInFlow ? FLOW_CATEGORIES.indexOf(cat.id) : -1;
+        const isActive = isInFlow && flowIndex === activeFlowStep && !isDone;
 
-      {/* Menu Content */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentCategory.id}
-          className="v3-menu-content"
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -30 }}
-          transition={{ duration: 0.25 }}
-        >
-          <h2 className="v3-category-title">{currentCategory.title}</h2>
-          <div className="v3-meal-grid">
-            {currentCategory.items.map((item, i) => (
-              <MealCardV3
-                key={item.id}
-                item={item}
-                categoryId={currentCategory.id}
-                isSelected={selectedItems[currentCategory.id]?.id === item.id}
-                onSelect={handleSelectItem}
-                index={i}
-              />
-            ))}
+        return (
+          <div
+            key={cat.id}
+            ref={el => categoryRefs.current[cat.id] = el}
+            className="v3-category-section"
+          >
+            <div className="v3-category-section-header">
+              <span className="v3-category-section-emoji">{cat.items[0]?.icon || '🍽️'}</span>
+              <h2 className="v3-category-title">
+                {cat.title.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim()}
+              </h2>
+              {isInFlow && (
+                <span className={`v3-category-step-badge ${isDone ? 'done' : ''} ${isActive ? 'active' : ''}`}>
+                  {isDone ? '✓' : flowIndex + 1}
+                </span>
+              )}
+              {!isInFlow && (
+                <span className="v3-category-step-badge optional">optional</span>
+              )}
+            </div>
+            <div className="v3-meal-grid">
+              {cat.items.map((item, i) => (
+                <MealCardV3
+                  key={item.id}
+                  item={item}
+                  categoryId={cat.id}
+                  isSelected={selectedItems[cat.id]?.id === item.id}
+                  onSelect={handleSelectItem}
+                  index={i}
+                />
+              ))}
+            </div>
           </div>
-        </motion.div>
-      </AnimatePresence>
+        );
+      })}
     </div>
   );
 }
