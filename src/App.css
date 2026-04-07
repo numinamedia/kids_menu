@@ -741,6 +741,29 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
+/* Version toggle link */
+.version-toggle {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 800;
+  padding: 10px 20px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.version-toggle:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
 /* ========================================= */
 /* --- PIN DIALOG --- */
 /* ========================================= */

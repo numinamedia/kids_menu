@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import confetti from 'canvas-confetti'
 import './App.css'
+import './components/v2/v2.css'
 import { orderNotes } from './data/menuData'
 import { useMenu } from './hooks/useMenu'
 import ProfileGateway from './components/ProfileGateway'
@@ -10,6 +11,12 @@ import OrderFooter from './components/OrderFooter'
 import SuccessModal from './components/SuccessModal'
 import Dashboard from './components/ParentDashboard/Dashboard'
 import { supabase } from './lib/supabase'
+
+// V2 Components
+import ProfileGatewayV2 from './components/v2/ProfileGatewayV2'
+import MenuScreenV2 from './components/v2/MenuScreenV2'
+import OrderFooterV2 from './components/v2/OrderFooterV2'
+import SuccessModalV2 from './components/v2/SuccessModalV2'
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxiX_dIulvMTLzRZuTN6jYVrms8F8GYVugxdEGU6rcHhW0PU2Y6g4meQjchzrmZqnOodg/exec";
 
@@ -21,6 +28,9 @@ function saveLastOrder(kidId, selectedItems) {
   }
 }
 
+// Version toggle - change to 'v2' to test the new design
+const APP_VERSION = 'v1'; // 'v1' or 'v2'
+
 function KidApp() {
   const { menuCategories } = useMenu();
   const [activeKid, setActiveKid] = useState(null);
@@ -29,6 +39,12 @@ function KidApp() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [orderError, setOrderError] = useState(false);
+
+  // Use V2 components if version is 'v2'
+  const GatewayComponent = APP_VERSION === 'v2' ? ProfileGatewayV2 : ProfileGateway;
+  const MenuComponent = APP_VERSION === 'v2' ? MenuScreenV2 : MenuScreen;
+  const FooterComponent = APP_VERSION === 'v2' ? OrderFooterV2 : OrderFooter;
+  const SuccessComponent = APP_VERSION === 'v2' ? SuccessModalV2 : SuccessModal;
 
   const handleSelectKid = (profile, prefillItems = null) => {
     setActiveKid(profile);
@@ -121,21 +137,56 @@ function KidApp() {
   if (!activeKid) {
     return (
       <>
-        <ProfileGateway onSelectKid={handleSelectKid} />
+        <GatewayComponent onSelectKid={handleSelectKid} />
         <Link to="/admin" className="admin-link">🔒 Parent Dashboard</Link>
+        <Link to="/?v=v2" className="version-toggle">
+          {APP_VERSION === 'v2' ? 'Switch to v1' : 'Try v2 ✨'}
+        </Link>
       </>
     );
   }
 
+  // V2 layout
+  if (APP_VERSION === 'v2') {
+    return (
+      <>
+        {showSuccess && <SuccessComponent />}
+        <MenuComponent
+          activeKid={activeKid}
+          selectedItems={selectedItems}
+          onSelectItem={handleSelectItem}
+          onSwitchUser={handleSwitchUser}
+        />
+        {!showSuccess && (
+          <>
+            {orderError && (
+              <div className="order-error">
+                ⚠️ Couldn't send — check your connection and try again.
+              </div>
+            )}
+            <FooterComponent
+              selectedItems={selectedItems}
+              activeNotes={activeNotes}
+              onToggleNote={handleToggleNote}
+              onSendOrder={handleSendOrder}
+              submitting={submitting}
+            />
+          </>
+        )}
+      </>
+    );
+  }
+
+  // V1 layout (original)
   return (
     <div
       className="gateway-bg"
       style={{ '--kid-color': activeKid.color, '--kid-color-shadow': activeKid.color + '66' }}
     >
-      {showSuccess && <SuccessModal />}
+      {showSuccess && <SuccessComponent />}
 
       <div className={`menu-glass-wrapper ${showSuccess ? 'blur-out' : ''}`}>
-        <MenuScreen
+        <MenuComponent
           activeKid={activeKid}
           selectedItems={selectedItems}
           onSelectItem={handleSelectItem}
@@ -150,7 +201,7 @@ function KidApp() {
               ⚠️ Couldn't send — check your connection and try again.
             </div>
           )}
-          <OrderFooter
+          <FooterComponent
             selectedItems={selectedItems}
             activeNotes={activeNotes}
             onToggleNote={handleToggleNote}
@@ -164,6 +215,15 @@ function KidApp() {
 }
 
 function App() {
+  // Check URL for version parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const versionParam = urlParams.get('v');
+  
+  // Set version based on URL param or default
+  if (versionParam === 'v2') {
+    window.APP_VERSION = 'v2';
+  }
+
   return (
     <BrowserRouter>
       <Routes>
