@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import confetti from 'canvas-confetti'
 import './App.css'
-import './components/v2/v2.css'
 import { orderNotes } from './data/menuData'
 import { useMenu } from './hooks/useMenu'
 import ProfileGateway from './components/ProfileGateway'
@@ -11,12 +10,6 @@ import OrderFooter from './components/OrderFooter'
 import SuccessModal from './components/SuccessModal'
 import Dashboard from './components/ParentDashboard/Dashboard'
 import { supabase } from './lib/supabase'
-
-// V2 Components
-import ProfileGatewayV2 from './components/v2/ProfileGatewayV2'
-import MenuScreenV2 from './components/v2/MenuScreenV2'
-import OrderFooterV2 from './components/v2/OrderFooterV2'
-import SuccessModalV2 from './components/v2/SuccessModalV2'
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxiX_dIulvMTLzRZuTN6jYVrms8F8GYVugxdEGU6rcHhW0PU2Y6g4meQjchzrmZqnOodg/exec";
 
@@ -28,12 +21,6 @@ function saveLastOrder(kidId, selectedItems) {
   }
 }
 
-// Get version from URL parameter or default to 'v1'
-function getAppVersion() {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get('v') || 'v1';
-}
-
 function KidApp() {
   const { menuCategories } = useMenu();
   const [activeKid, setActiveKid] = useState(null);
@@ -42,15 +29,6 @@ function KidApp() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [orderError, setOrderError] = useState(false);
-
-  // Get current version
-  const version = getAppVersion();
-
-  // Use V2 components if version is 'v2'
-  const GatewayComponent = version === 'v2' ? ProfileGatewayV2 : ProfileGateway;
-  const MenuComponent = version === 'v2' ? MenuScreenV2 : MenuScreen;
-  const FooterComponent = version === 'v2' ? OrderFooterV2 : OrderFooter;
-  const SuccessComponent = version === 'v2' ? SuccessModalV2 : SuccessModal;
 
   const handleSelectKid = (profile, prefillItems = null) => {
     setActiveKid(profile);
@@ -143,56 +121,21 @@ function KidApp() {
   if (!activeKid) {
     return (
       <>
-        <GatewayComponent onSelectKid={handleSelectKid} />
+        <ProfileGateway onSelectKid={handleSelectKid} />
         <Link to="/admin" className="admin-link">🔒 Parent Dashboard</Link>
-        <Link to={version === 'v2' ? '/' : '/?v=v2'} className="version-toggle">
-          {version === 'v2' ? 'Switch to v1' : 'Try v2 ✨'}
-        </Link>
       </>
     );
   }
 
-  // V2 layout
-  if (version === 'v2') {
-    return (
-      <>
-        {showSuccess && <SuccessComponent />}
-        <MenuComponent
-          activeKid={activeKid}
-          selectedItems={selectedItems}
-          onSelectItem={handleSelectItem}
-          onSwitchUser={handleSwitchUser}
-        />
-        {!showSuccess && (
-          <>
-            {orderError && (
-              <div className="order-error">
-                ⚠️ Couldn't send — check your connection and try again.
-              </div>
-            )}
-            <FooterComponent
-              selectedItems={selectedItems}
-              activeNotes={activeNotes}
-              onToggleNote={handleToggleNote}
-              onSendOrder={handleSendOrder}
-              submitting={submitting}
-            />
-          </>
-        )}
-      </>
-    );
-  }
-
-  // V1 layout (original)
   return (
     <div
       className="gateway-bg"
       style={{ '--kid-color': activeKid.color, '--kid-color-shadow': activeKid.color + '66' }}
     >
-      {showSuccess && <SuccessComponent />}
+      {showSuccess && <SuccessModal />}
 
       <div className={`menu-glass-wrapper ${showSuccess ? 'blur-out' : ''}`}>
-        <MenuComponent
+        <MenuScreen
           activeKid={activeKid}
           selectedItems={selectedItems}
           onSelectItem={handleSelectItem}
@@ -207,7 +150,7 @@ function KidApp() {
               ⚠️ Couldn't send — check your connection and try again.
             </div>
           )}
-          <FooterComponent
+          <OrderFooter
             selectedItems={selectedItems}
             activeNotes={activeNotes}
             onToggleNote={handleToggleNote}
@@ -221,13 +164,10 @@ function KidApp() {
 }
 
 function App() {
-  // Force re-render when URL changes by using a key
-  const version = getAppVersion();
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route key={version} path="/" element={<KidApp />} />
+        <Route path="/" element={<KidApp />} />
         <Route path="/admin" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
