@@ -2,12 +2,14 @@ import { useState } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import confetti from 'canvas-confetti'
 import './App.css'
-import { orderNotes, menuCategories } from './data/menuData'
+import { orderNotes } from './data/menuData'
+import { useMenu } from './hooks/useMenu'
 import ProfileGateway from './components/ProfileGateway'
 import MenuScreen from './components/MenuScreen'
 import OrderFooter from './components/OrderFooter'
 import SuccessModal from './components/SuccessModal'
 import Dashboard from './components/ParentDashboard/Dashboard'
+import { supabase } from './lib/supabase'
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxiX_dIulvMTLzRZuTN6jYVrms8F8GYVugxdEGU6rcHhW0PU2Y6g4meQjchzrmZqnOodg/exec";
 
@@ -20,6 +22,7 @@ function saveLastOrder(kidId, selectedItems) {
 }
 
 function KidApp() {
+  const { menuCategories } = useMenu();
   const [activeKid, setActiveKid] = useState(null);
   const [selectedItems, setSelectedItems] = useState({});
   const [activeNotes, setActiveNotes] = useState([]);
@@ -70,6 +73,7 @@ function KidApp() {
       }
     });
 
+    // Send to Google Sheets (backup)
     const formData = new URLSearchParams();
     formData.append('kid', activeKid.name);
     formData.append('main', selectedItems['mains']?.name || 'None');
@@ -82,12 +86,26 @@ function KidApp() {
     formData.append('items', JSON.stringify(orderSummary));
 
     try {
-      await fetch(GOOGLE_SCRIPT_URL, {
+      // Fire and forget to Google Sheets
+      fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: formData.toString(),
-      });
+      }).catch(() => {});
+
+      // Save to Supabase (primary order storage)
+      if (import.meta.env.VITE_SUPABASE_URL) {
+        await supabase
+          .from('orders')
+          .insert([{
+            kid_name: activeKid.name,
+            items: orderSummary,
+            notes: noteLabels || 'None',
+            status: 'pending',
+            timestamp: new Date().toISOString(),
+          }]);
+      }
 
       saveLastOrder(activeKid.id, selectedItems);
       setShowSuccess(true);

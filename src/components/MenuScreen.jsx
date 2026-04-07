@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { menuCategories } from '../data/menuData';
+import { menuCategories as localMenuCategories } from '../data/menuData';
+import { useMenu } from '../hooks/useMenu';
 import MealCard from './MealCard';
 
 export default function MenuScreen({ activeKid, selectedItems, onSelectItem, onSwitchUser }) {
+  const { menuCategories } = useMenu();
   const [currentTab, setCurrentTab] = useState(0);
 
   // Reset to first tab whenever the active kid changes
@@ -22,6 +24,7 @@ export default function MenuScreen({ activeKid, selectedItems, onSelectItem, onS
   };
 
   const currentCategory = menuCategories[currentTab];
+  if (!currentCategory) return null;
 
   return (
     <div className="glass-panel menu-glass">
