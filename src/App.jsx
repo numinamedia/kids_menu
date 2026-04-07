@@ -28,8 +28,11 @@ function saveLastOrder(kidId, selectedItems) {
   }
 }
 
-// Version toggle - change to 'v2' to test the new design
-const APP_VERSION = 'v1'; // 'v1' or 'v2'
+// Get version from URL parameter or default to 'v1'
+function getAppVersion() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('v') || 'v1';
+}
 
 function KidApp() {
   const { menuCategories } = useMenu();
@@ -40,11 +43,14 @@ function KidApp() {
   const [submitting, setSubmitting] = useState(false);
   const [orderError, setOrderError] = useState(false);
 
+  // Get current version
+  const version = getAppVersion();
+
   // Use V2 components if version is 'v2'
-  const GatewayComponent = APP_VERSION === 'v2' ? ProfileGatewayV2 : ProfileGateway;
-  const MenuComponent = APP_VERSION === 'v2' ? MenuScreenV2 : MenuScreen;
-  const FooterComponent = APP_VERSION === 'v2' ? OrderFooterV2 : OrderFooter;
-  const SuccessComponent = APP_VERSION === 'v2' ? SuccessModalV2 : SuccessModal;
+  const GatewayComponent = version === 'v2' ? ProfileGatewayV2 : ProfileGateway;
+  const MenuComponent = version === 'v2' ? MenuScreenV2 : MenuScreen;
+  const FooterComponent = version === 'v2' ? OrderFooterV2 : OrderFooter;
+  const SuccessComponent = version === 'v2' ? SuccessModalV2 : SuccessModal;
 
   const handleSelectKid = (profile, prefillItems = null) => {
     setActiveKid(profile);
@@ -139,15 +145,15 @@ function KidApp() {
       <>
         <GatewayComponent onSelectKid={handleSelectKid} />
         <Link to="/admin" className="admin-link">🔒 Parent Dashboard</Link>
-        <Link to="/?v=v2" className="version-toggle">
-          {APP_VERSION === 'v2' ? 'Switch to v1' : 'Try v2 ✨'}
+        <Link to={version === 'v2' ? '/' : '/?v=v2'} className="version-toggle">
+          {version === 'v2' ? 'Switch to v1' : 'Try v2 ✨'}
         </Link>
       </>
     );
   }
 
   // V2 layout
-  if (APP_VERSION === 'v2') {
+  if (version === 'v2') {
     return (
       <>
         {showSuccess && <SuccessComponent />}
@@ -215,19 +221,13 @@ function KidApp() {
 }
 
 function App() {
-  // Check URL for version parameter
-  const urlParams = new URLSearchParams(window.location.search);
-  const versionParam = urlParams.get('v');
-  
-  // Set version based on URL param or default
-  if (versionParam === 'v2') {
-    window.APP_VERSION = 'v2';
-  }
+  // Force re-render when URL changes by using a key
+  const version = getAppVersion();
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<KidApp />} />
+        <Route key={version} path="/" element={<KidApp />} />
         <Route path="/admin" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
