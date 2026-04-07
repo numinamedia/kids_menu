@@ -25,7 +25,7 @@
 .v3-kids-bg {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
   overflow: hidden;
   pointer-events: none;
   background: linear-gradient(135deg, #131F24 0%, #1a2e35 25%, #1e3a40 50%, #2a4a3a 75%, #1a3a2a 100%);
