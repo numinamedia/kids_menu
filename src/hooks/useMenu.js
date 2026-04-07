@@ -2,9 +2,13 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { menuCategories as localMenuCategories } from '../data/menuData';
 
+// Fixed category order - categories will always appear in this sequence
+const CATEGORY_ORDER = ['mains', 'sides', 'drinks', 'desserts', 'snacks'];
+
 /**
  * Hook to fetch menu items from Supabase.
  * Falls back to local menuData.js if Supabase is not configured or fails.
+ * Categories are always sorted in the fixed order, empty categories are hidden.
  */
 export function useMenu() {
   const [menuCategories, setMenuCategories] = useState(localMenuCategories);
@@ -48,7 +52,13 @@ export function useMenu() {
               bgColor: item.bg_color || '#ffeaa7',
             });
           });
-          setMenuCategories(Object.values(categories));
+
+          // Sort categories by fixed order and filter out empty ones
+          const sortedCategories = CATEGORY_ORDER
+            .filter(catId => categories[catId] && categories[catId].items.length > 0)
+            .map(catId => categories[catId]);
+
+          setMenuCategories(sortedCategories);
         }
       } catch (err) {
         console.warn('Failed to fetch menu from Supabase, using local data:', err.message);
