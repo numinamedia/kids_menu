@@ -42,17 +42,17 @@
     radial-gradient(circle at 70% 60%, rgba(255, 118, 117, 0.04) 0%, transparent 50%);
 }
 
-/* Light Mode - Warm, softer colors */
+/* Light Mode - Warm, softer colors, muted cards */
 .v3-light-mode {
-  --v3-bg: #F5F0E8;
-  --v3-surface: #FFF8F0;
-  --v3-surface-hover: #F0E8D8;
+  --v3-bg: #EDE5D8;
+  --v3-surface: #E8DFD0;
+  --v3-surface-hover: #DDD5C5;
   --v3-text: #37464F;
   --v3-text-secondary: #777777;
   --v3-border: rgba(0, 0, 0, 0.08);
-  --v3-shadow: rgba(0, 0, 0, 0.08);
-  --v3-card-bg: #FFF8F0;
-  --v3-gradient: linear-gradient(135deg, #F5F0E8 0%, #EDE5D8 50%, #F5F0E8 100%);
+  --v3-shadow: rgba(0, 0, 0, 0.06);
+  --v3-card-bg: #F5EDE0;
+  --v3-gradient: linear-gradient(135deg, #EDE5D8 0%, #E0D8C8 50%, #EDE5D8 100%);
 }
 
 .v3-light-mode .v3-kids-bg {
@@ -291,12 +291,11 @@
 .v3-category-section-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
   margin-bottom: 20px;
-}
-
-.v3-category-section-emoji {
-  font-size: 1.8rem;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--v3-border);
 }
 
 .v3-category-title {

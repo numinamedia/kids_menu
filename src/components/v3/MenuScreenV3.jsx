@@ -93,6 +93,9 @@ export default function MenuScreenV3({ activeKid, selectedItems, onSelectItem, o
         const flowIndex = isInFlow ? FLOW_CATEGORIES.indexOf(cat.id) : -1;
         const isActive = isInFlow && flowIndex === activeFlowStep && !isDone;
 
+        // Clean category name without emoji
+        const cleanTitle = cat.title.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
+
         return (
           <div
             key={cat.id}
@@ -100,10 +103,7 @@ export default function MenuScreenV3({ activeKid, selectedItems, onSelectItem, o
             className="v3-category-section"
           >
             <div className="v3-category-section-header">
-              <span className="v3-category-section-emoji">{cat.items[0]?.icon || '🍽️'}</span>
-              <h2 className="v3-category-title">
-                {cat.title.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim()}
-              </h2>
+              <h2 className="v3-category-title">{cleanTitle}</h2>
               {isInFlow && (
                 <span className={`v3-category-step-badge ${isDone ? 'done' : ''} ${isActive ? 'active' : ''}`}>
                   {isDone ? '✓' : flowIndex + 1}
