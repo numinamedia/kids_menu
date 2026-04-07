@@ -15,11 +15,14 @@ export default function MenuScreen({ activeKid, selectedItems, onSelectItem, onS
   const handleSelectItem = (categoryId, item) => {
     onSelectItem(categoryId, item);
 
-    // Auto-advance to next tab after a short delay so the selection is visible
-    const currentIndex = menuCategories.findIndex(c => c.id === categoryId);
-    const nextCategory = menuCategories[currentIndex + 1];
-    if (nextCategory) {
-      setTimeout(() => setCurrentTab(currentIndex + 1), 400);
+    // Auto-advance only for mains → sides → drinks (not desserts or snacks)
+    const autoAdvanceCategories = ['mains', 'sides', 'drinks'];
+    if (autoAdvanceCategories.includes(categoryId)) {
+      const currentIndex = menuCategories.findIndex(c => c.id === categoryId);
+      const nextCategory = menuCategories[currentIndex + 1];
+      if (nextCategory) {
+        setTimeout(() => setCurrentTab(currentIndex + 1), 400);
+      }
     }
   };
 
