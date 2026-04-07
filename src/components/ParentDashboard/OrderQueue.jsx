@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useOrders, useUpdateOrder } from '../../hooks/useOrders';
 
 // Format date/time in Edmonton timezone (America/Edmonton)
@@ -28,6 +29,7 @@ const STATUS_COLORS = {
 export default function OrderQueue() {
   const { orders, loading, error, filter, setFilter, refresh } = useOrders('pending');
   const { updateOrderStatus, updating } = useUpdateOrder();
+  const [selectedOrders, setSelectedOrders] = useState(new Set());
 
   const advanceStatus = (currentStatus) => {
     const flow = ['pending', 'preparing', 'ready', 'completed'];
@@ -35,12 +37,46 @@ export default function OrderQueue() {
     return flow[Math.min(idx + 1, flow.length - 1)];
   };
 
-  const handleAdvanceOrder = async (order) => {
-    const nextStatus = advanceStatus(order.status);
-    const success = await updateOrderStatus(order.id, nextStatus);
-    if (success) {
-      refresh(); // Force refresh after status update
+  const toggleSelectOrder = (orderId) => {
+    setSelectedOrders(prev => {
+      const next = new Set(prev);
+      if (next.has(orderId)) {
+        next.delete(orderId);
+      } else {
+        next.add(orderId);
+      }
+      return next;
+    });
+  };
+
+  const selectAll = () => {
+    setSelectedOrders(new Set(orders.map(o => o.id)));
+  };
+
+  const clearSelection = () => {
+    setSelectedOrders(new Set());
+  };
+
+  const handleAdvanceSelected = async () => {
+    if (selectedOrders.size === 0) return;
+    
+    // Get the most common status among selected orders
+    const statusCounts = {};
+    orders.forEach(order => {
+      if (selectedOrders.has(order.id)) {
+        statusCounts[order.status] = (statusCounts[order.status] || 0) + 1;
+      }
+    });
+    const mostCommonStatus = Object.entries(statusCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
+    const nextStatus = advanceStatus(mostCommonStatus);
+
+    // Update all selected orders
+    for (const orderId of selectedOrders) {
+      await updateOrderStatus(orderId, nextStatus);
     }
+    
+    setSelectedOrders(new Set());
+    refresh();
   };
 
   if (!import.meta.env.VITE_SUPABASE_URL) {
@@ -79,6 +115,31 @@ export default function OrderQueue() {
         ))}
       </div>
 
+      {orders.length > 0 && (
+        <div className="selection-controls">
+          <span className="selection-info">
+            {selectedOrders.size > 0 ? `${selectedOrders.size} selected` : 'Tap orders to select'}
+          </span>
+          <div className="selection-actions">
+            <button className="select-all-btn" onClick={selectAll}>Select All</button>
+            {selectedOrders.size > 0 && (
+              <>
+                <button className="clear-btn" onClick={clearSelection}>Clear</button>
+                <button 
+                  className="advance-selected-btn" 
+                  onClick={handleAdvanceSelected}
+                  disabled={updating}
+                >
+                  {filter === 'pending' ? 'Start Preparing' : 
+                   filter === 'preparing' ? 'Mark Ready' : 
+                   filter === 'ready' ? 'Complete' : 'Advance'} ({selectedOrders.size})
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {loading && <p className="loading-text">Loading orders...</p>}
       {error && <p className="error-text">Error: {error}</p>}
 
@@ -87,60 +148,50 @@ export default function OrderQueue() {
       )}
 
       <div className="orders-grid">
-        {orders.map(order => (
-          <div
-            key={order.id}
-            className="order-card"
-            style={{ borderLeftColor: STATUS_COLORS[order.status] || '#ccc' }}
-          >
-            <div className="order-header">
-              <div className="order-kid">
-                <span className="kid-avatar">{order.kid_name?.[0]}</span>
-                <strong>{order.kid_name}</strong>
-              </div>
-              <span
-                className="order-status-badge"
-                style={{ backgroundColor: STATUS_COLORS[order.status] || '#ccc' }}
-              >
-                {STATUS_LABELS[order.status] || order.status}
-              </span>
-            </div>
-
-            <div className="order-items">
-              {order.items && typeof order.items === 'object' && Object.entries(order.items).map(([category, item]) => (
-                item && item.name && (
-                  <div key={category} className="order-item">
-                    <span className="item-category">{category}:</span>
-                    <span className="item-icon">{item.icon}</span>
-                    <span className="item-name">{item.name}</span>
-                  </div>
-                )
-              ))}
-            </div>
-
-            {order.notes && order.notes !== 'None' && (
-              <div className="order-notes">📝 {order.notes}</div>
-            )}
-
-            <div className="order-timestamp">
-              🕐 {formatEdmontonTime(order.timestamp)}
-            </div>
-
-            <div className="order-footer">
-              {order.status !== 'completed' && (
-                <button
-                  className="advance-btn"
-                  onClick={() => handleAdvanceOrder(order)}
-                  disabled={updating}
+        {orders.map(order => {
+          const isSelected = selectedOrders.has(order.id);
+          return (
+            <div
+              key={order.id}
+              className={`order-card ${isSelected ? 'selected' : ''}`}
+              style={{ borderLeftColor: STATUS_COLORS[order.status] || '#ccc' }}
+              onClick={() => toggleSelectOrder(order.id)}
+            >
+              <div className="order-header">
+                <div className="order-kid">
+                  <span className="kid-avatar">{order.kid_name?.[0]}</span>
+                  <strong>{order.kid_name}</strong>
+                </div>
+                <span
+                  className="order-status-badge"
+                  style={{ backgroundColor: STATUS_COLORS[order.status] || '#ccc' }}
                 >
-                  {order.status === 'pending' ? 'Start Preparing →' : 
-                   order.status === 'preparing' ? 'Mark Ready →' : 
-                   'Complete →'}
-                </button>
+                  {STATUS_LABELS[order.status] || order.status}
+                </span>
+              </div>
+
+              <div className="order-items">
+                {order.items && typeof order.items === 'object' && Object.entries(order.items).map(([category, item]) => (
+                  item && item.name && (
+                    <div key={category} className="order-item">
+                      <span className="item-category">{category}:</span>
+                      <span className="item-icon">{item.icon}</span>
+                      <span className="item-name">{item.name}</span>
+                    </div>
+                  )
+                ))}
+              </div>
+
+              {order.notes && order.notes !== 'None' && (
+                <div className="order-notes">📝 {order.notes}</div>
               )}
+
+              <div className="order-timestamp">
+                🕐 {formatEdmontonTime(order.timestamp)}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
