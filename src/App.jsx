@@ -145,13 +145,8 @@ function KidApp() {
   if (!activeKid) {
     return (
       <>
-        {/* Animated gradient mesh background */}
-        <div className="v3-mesh-bg">
-          <div className="v3-mesh-bg__blob v3-mesh-bg__blob--1" />
-          <div className="v3-mesh-bg__blob v3-mesh-bg__blob--2" />
-          <div className="v3-mesh-bg__blob v3-mesh-bg__blob--3" />
-          <div className="v3-mesh-bg__blob v3-mesh-bg__blob--4" />
-        </div>
+        {/* Static kid-friendly gradient background */}
+        <div className="v3-kids-bg" />
         <button className="v3-theme-toggle" onClick={toggleTheme}>
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
@@ -163,13 +158,8 @@ function KidApp() {
 
   return (
     <>
-      {/* Animated gradient mesh background */}
-      <div className="v3-mesh-bg">
-        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--1" />
-        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--2" />
-        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--3" />
-        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--4" />
-      </div>
+      {/* Static kid-friendly gradient background */}
+      <div className="v3-kids-bg" />
       <button className="v3-theme-toggle" onClick={toggleTheme}>
         {theme === 'dark' ? '☀️' : '🌙'}
       </button>

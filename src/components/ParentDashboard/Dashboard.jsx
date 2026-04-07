@@ -30,13 +30,8 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container v3-dark-dashboard">
-      {/* Animated gradient mesh background */}
-      <div className="v3-mesh-bg">
-        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--1" />
-        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--2" />
-        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--3" />
-        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--4" />
-      </div>
+      {/* Static kid-friendly gradient background */}
+      <div className="v3-kids-bg" />
       
       <div className="v3-dark-dashboard-content">
         <div className="dashboard-header">

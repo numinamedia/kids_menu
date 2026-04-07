@@ -21,65 +21,25 @@
   --v3-gradient: linear-gradient(135deg, #131F24 0%, #1a2e35 50%, #131F24 100%);
 }
 
-/* Animated Gradient Mesh Background */
-.v3-mesh-bg {
+/* Static Kid-Friendly Gradient Background */
+.v3-kids-bg {
   position: fixed;
   inset: 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  background: #131F24;
+  background: linear-gradient(135deg, #131F24 0%, #1a2e35 25%, #1e3a40 50%, #2a4a3a 75%, #1a3a2a 100%);
 }
 
-.v3-mesh-bg__blob {
+.v3-kids-bg::before {
+  content: '';
   position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.15;
-  animation: v3-mesh-float 20s ease-in-out infinite;
-}
-
-.v3-mesh-bg__blob--1 {
-  width: 400px;
-  height: 400px;
-  background: #6C5CE7;
-  top: -10%;
-  left: -10%;
-  animation-delay: 0s;
-}
-
-.v3-mesh-bg__blob--2 {
-  width: 350px;
-  height: 350px;
-  background: #00CEC9;
-  top: 50%;
-  right: -10%;
-  animation-delay: -7s;
-}
-
-.v3-mesh-bg__blob--3 {
-  width: 300px;
-  height: 300px;
-  background: #FD79A8;
-  bottom: -5%;
-  left: 30%;
-  animation-delay: -14s;
-}
-
-.v3-mesh-bg__blob--4 {
-  width: 250px;
-  height: 250px;
-  background: #FDCB6E;
-  top: 20%;
-  left: 50%;
-  animation-delay: -3s;
-}
-
-@keyframes v3-mesh-float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(30px, -20px) scale(1.1); }
-  50% { transform: translate(-20px, 30px) scale(0.95); }
-  75% { transform: translate(20px, 20px) scale(1.05); }
+  inset: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(108, 92, 231, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 206, 201, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(253, 203, 110, 0.04) 0%, transparent 50%),
+    radial-gradient(circle at 70% 60%, rgba(255, 118, 117, 0.04) 0%, transparent 50%);
 }
 
 /* Light Mode */
@@ -350,6 +310,15 @@
 .v3-category-tab.done {
   background: var(--v3-primary);
   color: white;
+}
+
+.v3-category-tab.optional {
+  opacity: 0.8;
+  border: 2px dashed var(--v3-border);
+}
+
+.v3-category-tab.optional:active {
+  background: var(--v3-surface-hover);
 }
 
 .v3-tab-emoji {
