@@ -28,20 +28,8 @@ function saveLastOrder(kidId, selectedItems) {
   }
 }
 
-// Get version from URL
-function getAppVersion() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get('v');
-}
-
-// Get theme from localStorage or URL
+// Theme management
 function getTheme() {
-  const params = new URLSearchParams(window.location.search);
-  const urlTheme = params.get('theme');
-  if (urlTheme) {
-    localStorage.setItem('v3-theme', urlTheme);
-    return urlTheme;
-  }
   return localStorage.getItem('v3-theme') || 'dark';
 }
 
@@ -53,25 +41,18 @@ function KidApp() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [orderError, setOrderError] = useState(false);
-  const version = getAppVersion();
   const [theme, setTheme] = useState(getTheme());
 
   // Apply theme class
   useEffect(() => {
-    if (version === 'v3') {
-      document.documentElement.classList.toggle('v3-light-mode', theme === 'light');
-    } else {
-      document.documentElement.classList.remove('v3-light-mode');
-    }
-  }, [version, theme]);
+    document.documentElement.classList.toggle('v3-light-mode', theme === 'light');
+  }, [theme]);
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
     localStorage.setItem('v3-theme', newTheme);
   };
-
-  const isV3 = version === 'v3';
 
   const handleSelectKid = (profile, prefillItems = null) => {
     setActiveKid(profile);
@@ -164,78 +145,42 @@ function KidApp() {
   if (!activeKid) {
     return (
       <>
-        {isV3 ? (
-          <>
-            <button className="v3-theme-toggle" onClick={toggleTheme}>
-              {theme === 'dark' ? '☀️' : '🌙'}
-            </button>
-            <ProfileGatewayV3 onSelectKid={handleSelectKid} />
-          </>
-        ) : (
-          <>
-            <ProfileGateway onSelectKid={handleSelectKid} />
-          </>
-        )}
-        <Link to="/admin" className="admin-link">🔒 Parent Dashboard</Link>
-        <Link to={isV3 ? '/' : '/?v=v3'} className="version-toggle">
-          {isV3 ? 'Switch to v1' : 'Try v3 ✨'}
-        </Link>
-      </>
-    );
-  }
-
-  // V3 Layout
-  if (isV3) {
-    return (
-      <>
+        {/* Animated gradient mesh background */}
+        <div className="v3-mesh-bg">
+          <div className="v3-mesh-bg__blob v3-mesh-bg__blob--1" />
+          <div className="v3-mesh-bg__blob v3-mesh-bg__blob--2" />
+          <div className="v3-mesh-bg__blob v3-mesh-bg__blob--3" />
+          <div className="v3-mesh-bg__blob v3-mesh-bg__blob--4" />
+        </div>
         <button className="v3-theme-toggle" onClick={toggleTheme}>
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
-        {showSuccess && <SuccessModalV3 />}
-
-        <MenuScreenV3
-          activeKid={activeKid}
-          selectedItems={selectedItems}
-          onSelectItem={handleSelectItem}
-          onSwitchUser={handleSwitchUser}
-        />
-
-        {!showSuccess && (
-          <>
-            {orderError && (
-              <div className="order-error">
-                ⚠️ Couldn't send — check your connection and try again.
-              </div>
-            )}
-            <OrderFooterV3
-              selectedItems={selectedItems}
-              activeNotes={activeNotes}
-              onToggleNote={handleToggleNote}
-              onSendOrder={handleSendOrder}
-              submitting={submitting}
-            />
-          </>
-        )}
+        <ProfileGatewayV3 onSelectKid={handleSelectKid} />
+        <Link to="/admin" className="admin-link">🔒 Parent Dashboard</Link>
       </>
     );
   }
 
-  // V1 Layout (Original)
   return (
-    <div
-      className="gateway-bg"
-      style={{ '--kid-color': activeKid.color, '--kid-color-shadow': activeKid.color + '66' }}
-    >
-      {showSuccess && <SuccessModal />}
-
-      <div className={`menu-glass-wrapper ${showSuccess ? 'blur-out' : ''}`}>
-        <MenuScreen
-          activeKid={activeKid}
-          selectedItems={selectedItems}
-          onSelectItem={handleSelectItem}
-          onSwitchUser={handleSwitchUser}
-        />
+    <>
+      {/* Animated gradient mesh background */}
+      <div className="v3-mesh-bg">
+        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--1" />
+        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--2" />
+        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--3" />
+        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--4" />
       </div>
+      <button className="v3-theme-toggle" onClick={toggleTheme}>
+        {theme === 'dark' ? '☀️' : '🌙'}
+      </button>
+      {showSuccess && <SuccessModalV3 />}
+
+      <MenuScreenV3
+        activeKid={activeKid}
+        selectedItems={selectedItems}
+        onSelectItem={handleSelectItem}
+        onSwitchUser={handleSwitchUser}
+      />
 
       {!showSuccess && (
         <>
@@ -244,7 +189,7 @@ function KidApp() {
               ⚠️ Couldn't send — check your connection and try again.
             </div>
           )}
-          <OrderFooter
+          <OrderFooterV3
             selectedItems={selectedItems}
             activeNotes={activeNotes}
             onToggleNote={handleToggleNote}
@@ -253,7 +198,7 @@ function KidApp() {
           />
         </>
       )}
-    </div>
+    </>
   );
 }
 

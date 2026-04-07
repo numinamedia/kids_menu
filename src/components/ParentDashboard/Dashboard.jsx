@@ -29,31 +29,41 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <h1>🍽️ Parent Dashboard</h1>
-        <div className="header-actions">
-          <button className="back-to-kids-btn" onClick={() => navigate('/')}>
-            ← Back to Kids App
-          </button>
+    <div className="dashboard-container v3-dark-dashboard">
+      {/* Animated gradient mesh background */}
+      <div className="v3-mesh-bg">
+        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--1" />
+        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--2" />
+        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--3" />
+        <div className="v3-mesh-bg__blob v3-mesh-bg__blob--4" />
+      </div>
+      
+      <div className="v3-dark-dashboard-content">
+        <div className="dashboard-header">
+          <h1>🍽️ Parent Dashboard</h1>
+          <div className="header-actions">
+            <button className="back-to-kids-btn" onClick={() => navigate('/')}>
+              ← Back to Kids App
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div className="dashboard-tabs">
-        {TABS.map(tab => (
-          <button
-            key={tab.id}
-            className={`tab-btn ${activeTab === tab.id ? 'active' : ''}`}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+        <div className="dashboard-tabs v3-tabs">
+          {TABS.map(tab => (
+            <button
+              key={tab.id}
+              className={`tab-btn ${activeTab === tab.id ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
 
-      <div className="dashboard-content">
-        {activeTab === 'orders' && <OrderQueue />}
-        {activeTab === 'menu' && <MenuEditor />}
+        <div className="dashboard-content">
+          {activeTab === 'orders' && <OrderQueue />}
+          {activeTab === 'menu' && <MenuEditor />}
+        </div>
       </div>
     </div>
   );

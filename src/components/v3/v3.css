@@ -21,6 +21,67 @@
   --v3-gradient: linear-gradient(135deg, #131F24 0%, #1a2e35 50%, #131F24 100%);
 }
 
+/* Animated Gradient Mesh Background */
+.v3-mesh-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #131F24;
+}
+
+.v3-mesh-bg__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  animation: v3-mesh-float 20s ease-in-out infinite;
+}
+
+.v3-mesh-bg__blob--1 {
+  width: 400px;
+  height: 400px;
+  background: #6C5CE7;
+  top: -10%;
+  left: -10%;
+  animation-delay: 0s;
+}
+
+.v3-mesh-bg__blob--2 {
+  width: 350px;
+  height: 350px;
+  background: #00CEC9;
+  top: 50%;
+  right: -10%;
+  animation-delay: -7s;
+}
+
+.v3-mesh-bg__blob--3 {
+  width: 300px;
+  height: 300px;
+  background: #FD79A8;
+  bottom: -5%;
+  left: 30%;
+  animation-delay: -14s;
+}
+
+.v3-mesh-bg__blob--4 {
+  width: 250px;
+  height: 250px;
+  background: #FDCB6E;
+  top: 20%;
+  left: 50%;
+  animation-delay: -3s;
+}
+
+@keyframes v3-mesh-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -20px) scale(1.1); }
+  50% { transform: translate(-20px, 30px) scale(0.95); }
+  75% { transform: translate(20px, 20px) scale(1.05); }
+}
+
 /* Light Mode */
 .v3-light-mode {
   --v3-bg: #F0F2F5;
@@ -561,6 +622,184 @@
   color: white;
   background: rgba(255, 255, 255, 0.3);
   transform: scale(1.05);
+}
+
+/* --- PARENT DASHBOARD DARK MODE --- */
+.v3-dark-dashboard {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--v3-bg);
+  color: var(--v3-text);
+}
+
+.v3-dark-dashboard-content {
+  position: relative;
+  z-index: 1;
+}
+
+.v3-dark-dashboard .dashboard-header h1 {
+  color: var(--v3-text);
+}
+
+.v3-dark-dashboard .back-to-kids-btn {
+  background: var(--v3-surface);
+  color: var(--v3-text);
+  border: 2px solid var(--v3-border);
+}
+
+.v3-dark-dashboard .dashboard-tabs.v3-tabs .tab-btn {
+  background: var(--v3-surface);
+  color: var(--v3-text-secondary);
+}
+
+.v3-dark-dashboard .dashboard-tabs.v3-tabs .tab-btn.active {
+  background: var(--v3-secondary);
+  color: white;
+}
+
+/* Dashboard section dark mode */
+.v3-dark-dashboard .dashboard-section {
+  background: var(--v3-surface);
+  color: var(--v3-text);
+  border: 2px solid var(--v3-border);
+}
+
+.v3-dark-dashboard .dashboard-section h2 {
+  color: var(--v3-text);
+}
+
+.v3-dark-dashboard .refresh-btn {
+  background: var(--v3-surface-hover);
+  color: var(--v3-text);
+}
+
+/* Order cards dark mode */
+.v3-dark-dashboard .order-card {
+  background: var(--v3-card-bg);
+  border: 2px solid var(--v3-border);
+}
+
+.v3-dark-dashboard .order-card:hover {
+  border-color: var(--v3-secondary);
+}
+
+.v3-dark-dashboard .order-item {
+  background: var(--v3-bg);
+  color: var(--v3-text);
+}
+
+.v3-dark-dashboard .order-notes {
+  background: rgba(253, 203, 110, 0.2);
+  color: #FDCB6E;
+}
+
+.v3-dark-dashboard .order-timestamp {
+  background: var(--v3-bg);
+  color: var(--v3-text-secondary);
+}
+
+.v3-dark-dashboard .advance-btn {
+  background: var(--v3-primary);
+  color: white;
+}
+
+/* Selection controls dark mode */
+.v3-dark-dashboard .selection-controls {
+  background: var(--v3-bg);
+  color: var(--v3-text);
+}
+
+.v3-dark-dashboard .selection-info {
+  color: var(--v3-text-secondary);
+}
+
+.v3-dark-dashboard .select-all-btn,
+.v3-dark-dashboard .clear-btn {
+  background: var(--v3-surface-hover);
+  color: var(--v3-text);
+}
+
+/* Filter buttons dark mode */
+.v3-dark-dashboard .filter-btn {
+  background: var(--v3-surface);
+  color: var(--v3-text-secondary);
+}
+
+.v3-dark-dashboard .filter-btn.active {
+  background: var(--v3-secondary);
+  color: white;
+}
+
+/* Menu editor dark mode */
+.v3-dark-dashboard .menu-form {
+  background: var(--v3-bg);
+}
+
+.v3-dark-dashboard .menu-form h3 {
+  color: var(--v3-text);
+}
+
+.v3-dark-dashboard .menu-form label {
+  color: var(--v3-text);
+}
+
+.v3-dark-dashboard .menu-form input,
+.v3-dark-dashboard .menu-form select {
+  background: var(--v3-surface);
+  color: var(--v3-text);
+  border: 2px solid var(--v3-border);
+}
+
+.v3-dark-dashboard .save-btn {
+  background: var(--v3-secondary);
+}
+
+.v3-dark-dashboard .cancel-btn {
+  background: var(--v3-surface);
+  color: var(--v3-text);
+}
+
+.v3-dark-dashboard .menu-item-card {
+  background: var(--v3-card-bg);
+  border-color: var(--v3-border);
+}
+
+.v3-dark-dashboard .item-label {
+  color: var(--v3-text);
+}
+
+.v3-dark-dashboard .menu-category-group h3 {
+  color: var(--v3-text-secondary);
+}
+
+/* PIN dialog dark mode */
+.v3-dark-dashboard .pin-dialog {
+  background: var(--v3-surface);
+  color: var(--v3-text);
+}
+
+.v3-dark-dashboard .pin-dialog h2 {
+  color: var(--v3-text);
+}
+
+.v3-dark-dashboard .pin-dialog p {
+  color: var(--v3-text-secondary);
+}
+
+.v3-dark-dashboard .pin-btn {
+  background: var(--v3-bg);
+  color: var(--v3-text);
+}
+
+.v3-dark-dashboard .pin-cancel-btn {
+  color: var(--v3-text-secondary);
+}
+
+/* Empty/loading text dark mode */
+.v3-dark-dashboard .loading-text,
+.v3-dark-dashboard .empty-text {
+  color: var(--v3-text-secondary);
 }
 
 /* --- RESPONSIVE --- */
